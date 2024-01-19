@@ -1,6 +1,7 @@
 package dev.lebenkov.todo.store.repository;
 
 import dev.lebenkov.todo.store.model.Account;
+import dev.lebenkov.todo.store.model.Category;
 import dev.lebenkov.todo.store.model.Task;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,4 +12,5 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends MongoRepository<Task, ObjectId> {
     List<Task> findAllByAccount(Account account);
+    List<Task> findAllByCategory(Category category);
 }
