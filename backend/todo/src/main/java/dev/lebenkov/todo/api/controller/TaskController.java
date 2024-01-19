@@ -27,8 +27,8 @@ public class TaskController {
         return new ResponseEntity<>(taskService.fetchAllTasks(), HttpStatusCode.valueOf(200));
     }
 
-    @PostMapping
+/*    @PostMapping
     public ResponseEntity<String> createTask() {
 
-    }
+    }*/
 }
