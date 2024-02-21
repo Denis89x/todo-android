@@ -4,7 +4,6 @@ import dev.lebenkov.todo.api.service.CategoryService;
 import dev.lebenkov.todo.store.dto.CategoryRequest;
 import dev.lebenkov.todo.store.dto.CategoryResponse;
 import dev.lebenkov.todo.store.dto.CategoryUpdateRequest;
-import dev.lebenkov.todo.store.model.Category;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
