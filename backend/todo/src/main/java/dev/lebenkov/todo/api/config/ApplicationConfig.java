@@ -1,12 +1,15 @@
 package dev.lebenkov.todo.api.config;
 
+import dev.lebenkov.todo.api.auditing.ApplicationAuditAware;
 import dev.lebenkov.todo.api.service.AccountDetailsService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -27,6 +30,11 @@ public class ApplicationConfig {
         authProvider.setUserDetailsService(accountDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    @Bean
+    public AuditorAware<ObjectId> auditorAware() {
+        return new ApplicationAuditAware();
     }
 
     @Bean

@@ -1,53 +1,47 @@
 package dev.lebenkov.todo.api.controller;
 
 import dev.lebenkov.todo.api.service.AuthService;
-import dev.lebenkov.todo.api.util.validation.AccountValidator;
-import dev.lebenkov.todo.store.dto.AccountRequestLogin;
-import dev.lebenkov.todo.store.dto.AccountRequestRegistration;
+import dev.lebenkov.todo.store.dto.AuthRequest;
+import dev.lebenkov.todo.store.dto.AuthResponse;
+import dev.lebenkov.todo.store.dto.RegistrationRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.Objects;
+import java.io.IOException;
 
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    AccountValidator accountValidator;
     AuthService authService;
 
     @PostMapping("/register")
-    public Map<String, String> performRegistration(
-            @RequestBody AccountRequestRegistration accountRequestRegistration,
-            BindingResult bindingResult) {
-        accountValidator.validate(accountRequestRegistration, bindingResult);
-
-        if (bindingResult.hasErrors())
-            return Map.of("Error", bindingResult.getAllErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .filter(Objects::nonNull)
-                    .toList()
-                    .toString());
-
-        return authService.register(accountRequestRegistration) ;
+    public ResponseEntity<AuthResponse> register(
+            @RequestBody @Valid RegistrationRequest registrationRequest) {
+        return ResponseEntity.ok(authService.register(registrationRequest));
     }
 
-    @PostMapping("/login")
-    public Map<String, String> performLogin(
-            @RequestBody AccountRequestLogin accountRequestLogin) {
-        return authService.login(accountRequestLogin);
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthResponse> authenticate(
+            @RequestBody @Valid AuthRequest authRequest) {
+        return ResponseEntity.ok(authService.authenticate(authRequest));
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        authService.refreshToken(request, response);
     }
 }

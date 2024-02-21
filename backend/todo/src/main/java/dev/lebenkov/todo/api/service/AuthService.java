@@ -1,12 +1,23 @@
 package dev.lebenkov.todo.api.service;
 
 
-import dev.lebenkov.todo.store.dto.AccountRequestLogin;
-import dev.lebenkov.todo.store.dto.AccountRequestRegistration;
+import dev.lebenkov.todo.store.dto.AuthRequest;
+import dev.lebenkov.todo.store.dto.AuthResponse;
+import dev.lebenkov.todo.store.dto.RegistrationRequest;
+import dev.lebenkov.todo.store.model.Account;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.Map;
+import java.io.IOException;
 
 public interface AuthService {
-    Map<String, String> register(AccountRequestRegistration accountRequestRegistration);
-    Map<String, String> login(AccountRequestLogin accountRequestLogin);
+    AuthResponse register(RegistrationRequest registrationRequest);
+
+    AuthResponse authenticate(AuthRequest authRequest);
+
+    void saveUserToken(Account account, String jwtToken);
+
+    void revokeAllUserTokens(Account account);
+
+    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }

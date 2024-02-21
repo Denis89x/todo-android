@@ -1,0 +1,7 @@
+package dev.lebenkov.todo.api.util.exception;
+
+public class AccountAlreadyExistsException extends RuntimeException {
+    public AccountAlreadyExistsException(String message) {
+        super(message);
+    }
+}
